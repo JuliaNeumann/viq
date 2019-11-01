@@ -14,16 +14,15 @@
 </template>
 
 <script>
+    import data from './data.json';
+
     export default {
         data: function() {
             return {
                 userInput: '',
-                messages: [
-                  {
-                    type: 'god',
-                    text: 'Wo bist du?'
-                  }
-                ]
+                questionData: {},
+                messages: [],
+                receivedUserAnswer: false
             };
         },
         methods: {
@@ -33,7 +32,29 @@
               text: this.userInput
             });
             this.userInput = '';
+            if (!this.receivedUserAnswer) {
+              setTimeout(() => {
+                this.messages.push({
+                  type: 'god',
+                  text: this.questionData.text
+                });
+              }, 500);
+              setTimeout(() => {
+                this.messages.push({
+                  type: 'god',
+                  text: this.questionData.bible
+                });
+              }, 1200);
+              this.receivedUserAnswer = true;
+            }
           }
+        },
+        created: function() {
+          this.questionData = data[Math.floor(Math.random() * data.length)];
+          this.messages.push({
+            type: 'god',
+            text: this.questionData.question
+          });
         }
     }
 </script>
@@ -52,6 +73,7 @@
   }
 
   .text {
+    max-width: 85%;
     border-color: #013034;
     border-width: 1;
     border-radius: 5;
